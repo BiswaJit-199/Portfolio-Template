@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aryan Sharma | BTech Portfolio</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Syne (display) + Outfit (body) + Fira Code (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <!-- DevIcons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['Outfit', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #07030f;
+      color: #e2d9f3;
+      overflow-x: hidden;
+    }
+
+    /* ── Glassmorphism ── */
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(168,85,247,0.15);
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(168,85,247,0.2);
+    }
+
+    /* Light-mode overrides */
+    html:not(.dark) body { background: linear-gradient(135deg,#f3eeff,#fdf6ff,#eef2ff); color: #1a0a2e; }
+    html:not(.dark) .glass { background: rgba(255,255,255,0.55); border: 1px solid rgba(168,85,247,0.2); }
+    html:not(.dark) .glass-card { background: rgba(255,255,255,0.75); border: 1px solid rgba(168,85,247,0.25); }
+    html:not(.dark) .nav-blur { background: rgba(243,238,255,0.88) !important; border-bottom: 1px solid rgba(168,85,247,0.15); }
+    html:not(.dark) .text-purple-200\/60 { color: rgb(88,28,135,0.7); }
+    html:not(.dark) .text-purple-200\/70 { color: rgba(88,28,135,0.75); }
+    html:not(.dark) .text-purple-200\/50 { color: rgba(88,28,135,0.55); }
+    html:not(.dark) .text-white { color: #1a0a2e !important; }
+    html:not(.dark) .orb { opacity: 0.06; }
+
+    /* ── Navbar ── */
+    .nav-blur {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      background: rgba(7,3,15,0.85);
+      border-bottom: 1px solid rgba(168,85,247,0.1);
+    }
+
+    /* ── Particles ── */
+    #particles-canvas {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
+      z-index:0; pointer-events:none;
+    }
+
+    /* ── Background Orbs ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.13;
+      pointer-events: none;
+      z-index: 0;
+      animation: orbFloat 10s ease-in-out infinite;
+    }
+    @keyframes orbFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-30px) scale(1.06); }
+    }
+
+    /* ── Gradient helpers ── */
+    .gradient-text {
+      background: linear-gradient(135deg, #c084fc 0%, #a855f7 40%, #ec4899 70%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gradient-text-2 {
+      background: linear-gradient(135deg, #c084fc, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      background: linear-gradient(135deg,#7e22ce,#a855f7);
+      position: relative; overflow: hidden;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    .btn-primary::after {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg,#a855f7,#ec4899);
+      opacity:0; transition: opacity 0.3s ease;
+    }
+    .btn-primary:hover { box-shadow: 0 0 24px rgba(168,85,247,0.45); transform: translateY(-1px); }
+    .btn-primary:hover::after { opacity:1; }
+    .btn-primary > * { position:relative; z-index:1; }
+
+    /* ── Typing cursor ── */
+    .cursor {
+      display: inline-block; width: 3px; height: 1.1em;
+      background: #a855f7; margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink .65s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ── Skill bars ── */
+    .skill-fill {
+      width: 0%;
+      transition: width 1.6s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ── 3D Cards ── */
+    .card-3d { transform-style: preserve-3d; transition: transform 0.12s ease, box-shadow 0.3s ease; }
+
+    /* ── Timeline ── */
+    .tl-line {
+      position: absolute; left: 1.5rem; top:0; bottom:0;
+      width: 2px;
+      background: linear-gradient(to bottom, #7e22ce, #ec4899, transparent);
+    }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,0.75);
+      backdrop-filter:blur(10px);
+      z-index:1000;
+      align-items:center; justify-content:center;
+    }
+    .modal-overlay.active { display:flex; }
+    .modal-box { animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes modalIn { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
+
+    /* ── Section tag ── */
+    .section-tag {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.73rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #a855f7;
+    }
+
+    /* ── Gradient border ── */
+    .grad-border {
+      position: relative;
+      border-radius: 1.25rem;
+    }
+    .grad-border::before {
+      content:''; position:absolute; inset:-1px;
+      border-radius: inherit; padding:1px;
+      background: linear-gradient(135deg,#a855f7,#ec4899,#06b6d4);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      pointer-events:none;
+    }
+
+    /* ── Mobile menu ── */
+    #mobile-menu { display:none; }
+    #mobile-menu.open { display:flex; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:#7e22ce; border-radius:2px; }
+
+    /* ── Hobby hover ── */
+    .hobby-card .hicon { transition: transform 0.3s ease; }
+    .hobby-card:hover .hicon { transform: scale(1.25) rotate(12deg); }
+
+    /* ── Glow pulse on hero ── */
+    .hero-glow {
+      position:absolute; width:500px; height:500px;
+      background: radial-gradient(circle, rgba(168,85,247,0.2) 0%, transparent 70%);
+      border-radius:50%; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      animation: glowPulse 4s ease-in-out infinite;
+      pointer-events:none; z-index:0;
+    }
+    @keyframes glowPulse { 0%,100%{transform:translate(-50%,-50%) scale(1); opacity:0.6} 50%{transform:translate(-50%,-50%) scale(1.15); opacity:1} }
+
+    /* line clamp */
+    .line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  </style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════
+     CANVAS PARTICLES
+═══════════════════════════════════════════ -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- Background Orbs -->
+<div class="orb w-96 h-96 bg-purple-600" style="top:8%;left:-4%;animation-delay:0s"></div>
+<div class="orb w-80 h-80 bg-pink-600"   style="top:55%;right:-3%;animation-delay:3.5s"></div>
+<div class="orb w-72 h-72 bg-cyan-500"   style="bottom:18%;left:32%;animation-delay:7s"></div>
+
+<!-- ═══════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <a href="#home" class="font-display font-extrabold text-xl tracking-tight">
+      <span class="gradient-text">A</span><span class="text-purple-200">.dev</span>
+    </a>
+
+    <!-- Desktop Links -->
+    <div class="hidden md:flex items-center gap-7">
+      <a href="#about"      class="nav-lnk text-sm font-medium text-purple-200/60 hover:text-purple-400 transition-colors duration-200">About</a>
+      <a href="#skills"     class="nav-lnk text-sm font-medium text-purple-200/60 hover:text-purple-400 transition-colors duration-200">Skills</a>
+      <a href="#projects"   class="nav-lnk text-sm font-medium text-purple-200/60 hover:text-purple-400 transition-colors duration-200">Projects</a>
+      <a href="#experience" class="nav-lnk text-sm font-medium text-purple-200/60 hover:text-purple-400 transition-colors duration-200">Experience</a>
+      <a href="#education"  class="nav-lnk text-sm font-medium text-purple-200/60 hover:text-purple-400 transition-colors duration-200">Education</a>
+      <a href="#contact"    class="nav-lnk text-sm font-medium text-purple-200/60 hover:text-purple-400 transition-colors duration-200">Contact</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- Dark Mode Toggle -->
+      <button id="theme-toggle" class="glass p-2 rounded-xl hover:bg-purple-500/20 transition-all" title="Toggle theme">
+        <i data-lucide="sun"  class="w-4 h-4 text-yellow-400 hidden dark:block"></i>
+        <i data-lucide="moon" class="w-4 h-4 text-purple-500 block dark:hidden"></i>
+      </button>
+      <!-- Mobile hamburger -->
+      <button id="menu-toggle" class="md:hidden glass p-2 rounded-xl">
+        <i data-lucide="menu" class="w-4 h-4 text-purple-400"></i>
+      </button>
+      <!-- Hire me CTA -->
+      <a href="#contact" class="hidden md:inline-flex btn-primary text-white text-sm font-semibold px-5 py-2 rounded-xl items-center gap-1.5">
+        <span>Hire Me</span>
+        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden flex-col gap-1 px-6 pb-4">
+    <a href="#about"      class="block py-2 text-sm text-purple-200/70 hover:text-purple-400 border-b border-purple-500/10">About</a>
+    <a href="#skills"     class="block py-2 text-sm text-purple-200/70 hover:text-purple-400 border-b border-purple-500/10">Skills</a>
+    <a href="#projects"   class="block py-2 text-sm text-purple-200/70 hover:text-purple-400 border-b border-purple-500/10">Projects</a>
+    <a href="#experience" class="block py-2 text-sm text-purple-200/70 hover:text-purple-400 border-b border-purple-500/10">Experience</a>
+    <a href="#education"  class="block py-2 text-sm text-purple-200/70 hover:text-purple-400 border-b border-purple-500/10">Education</a>
+    <a href="#contact"    class="block py-2 text-sm text-purple-200/70 hover:text-purple-400">Contact</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="home" class="relative min-h-screen flex items-center justify-center z-10 px-6 pt-20">
+  <div class="hero-glow"></div>
+  <div class="max-w-5xl mx-auto text-center relative z-10">
+
+    <!-- Status badge -->
+    <div class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 reveal">
+      <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+      <span class="font-mono text-xs text-green-400">Available for Opportunities</span>
+    </div>
+
+    <!-- Name -->
+    <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight mb-4 reveal">
+      Hi, I'm<br><span class="gradient-text">Alisha Mohapatra</span>
+    </h1>
+
+    <!-- Typing effect -->
+    <div class="font-display text-xl md:text-3xl font-semibold text-purple-300 mb-6 h-11 flex items-center justify-center gap-1 reveal">
+      <span id="typed-text"></span><span class="cursor"></span>
+    </div>
+
+    <!-- Tagline -->
+    <p class="text-base md:text-lg text-purple-200/60 max-w-2xl mx-auto mb-10 leading-relaxed reveal">
+      BTech CSE student at GIFT Autonomous, Bhubaneswar - building full-stack apps, exploring ML, and shipping things that matter.
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex flex-wrap items-center justify-center gap-4 reveal">
+      <a href="#projects" class="btn-primary text-white font-semibold px-8 py-3 rounded-2xl inline-flex items-center gap-2">
+        <span>View Projects</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+      <a href="#contact" class="glass text-purple-300 font-semibold px-8 py-3 rounded-2xl inline-flex items-center gap-2 hover:bg-purple-500/20 transition-all">
+        <i data-lucide="mail" class="w-4 h-4"></i>
+        <span>Contact Me</span>
+      </a>
+    </div>
+
+    <!-- Social -->
+    <div class="flex items-center justify-center gap-4 mt-10 reveal">
+      <a href="https://github.com" target="_blank" class="glass p-3 rounded-xl hover:bg-purple-500/20 transition-all hover:-translate-y-1">
+        <i data-lucide="github" class="w-5 h-5 text-purple-400"></i>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="glass p-3 rounded-xl hover:bg-purple-500/20 transition-all hover:-translate-y-1">
+        <i data-lucide="linkedin" class="w-5 h-5 text-purple-400"></i>
+      </a>
+      <a href="https://twitter.com" target="_blank" class="glass p-3 rounded-xl hover:bg-purple-500/20 transition-all hover:-translate-y-1">
+        <i data-lucide="twitter" class="w-5 h-5 text-purple-400"></i>
+      </a>
+      <a href="mailto:aryan@email.com" class="glass p-3 rounded-xl hover:bg-purple-500/20 transition-all hover:-translate-y-1">
+        <i data-lucide="mail" class="w-5 h-5 text-purple-400"></i>
+      </a>
+    </div>
+
+    <!-- Mini Stats -->
+    <div class="grid grid-cols-3 gap-5 max-w-sm mx-auto mt-16 reveal">
+      <div class="glass rounded-2xl p-4 text-center">
+        <div class="font-display text-2xl font-extrabold gradient-text">3+</div>
+        <div class="text-xs text-purple-300/50 mt-1">Projects</div>
+      </div>
+      <div class="glass rounded-2xl p-4 text-center">
+        <div class="font-display text-2xl font-extrabold gradient-text">2</div>
+        <div class="text-xs text-purple-300/50 mt-1">Internships</div>
+      </div>
+      <div class="glass rounded-2xl p-4 text-center">
+        <div class="font-display text-2xl font-extrabold gradient-text">8.2</div>
+        <div class="text-xs text-purple-300/50 mt-1">CGPA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-bounce">
+    <span class="text-xs text-purple-400/40 font-mono">scroll</span>
+    <i data-lucide="chevron-down" class="w-4 h-4 text-purple-400/40"></i>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════ -->
+<section id="about" class="relative z-10 py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-tag">// who i am</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mt-2">About <span class="gradient-text">Me</span></h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-14 items-center">
+      <!-- Avatar -->
+      <div class="flex justify-center reveal">
+        <div class="relative">
+          <div class="grad-border w-64 h-64 overflow-hidden rounded-2xl">
+            <div class="w-full h-full bg-gradient-to-br from-purple-950 via-purple-900 to-pink-950 flex items-center justify-center">
+              <div class="text-center">
+                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 mx-auto flex items-center justify-center text-3xl font-bold text-white font-display shadow-lg">AS</div>
+                <p class="mt-3 text-purple-300 font-mono text-sm">@aryandev</p>
+                <p class="text-purple-400/50 text-xs mt-1">BTech CSE • VIT</p>
+              </div>
+            </div>
+          </div>
+          <!-- Floating chips -->
+          <div class="absolute -top-4 -right-5 glass px-3 py-2 rounded-xl text-xs font-mono text-purple-300">⚡ BTech CSE</div>
+          <div class="absolute -bottom-4 -left-5 glass px-3 py-2 rounded-xl text-xs font-mono text-green-400">🚀 2025 Graduate</div>
+        </div>
+      </div>
+
+      <!-- Bio -->
+      <div class="reveal">
+        <p class="text-purple-200/70 leading-relaxed mb-5">
+          I'm <strong class="text-purple-300">Aryan Sharma</strong>, a final-year BTech Computer Science student at VIT Vellore. I love building products that solve real-world problems through elegant code and thoughtful design.
+        </p>
+        <p class="text-purple-200/70 leading-relaxed mb-8">
+          When I'm not coding, you'll find me competing in hackathons, sketching UI concepts, playing chess, or exploring new places. I believe great software is where engineering meets creativity.
+        </p>
+
+        <!-- Quick info -->
+        <div class="grid grid-cols-2 gap-3 mb-8">
+          <div class="glass rounded-xl p-3 flex items-center gap-3">
+            <i data-lucide="map-pin" class="w-4 h-4 text-purple-400 shrink-0"></i>
+            <span class="text-sm text-purple-200/70">Vellore, India</span>
+          </div>
+          <div class="glass rounded-xl p-3 flex items-center gap-3">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-purple-400 shrink-0"></i>
+            <span class="text-sm text-purple-200/70">VIT Vellore</span>
+          </div>
+          <div class="glass rounded-xl p-3 flex items-center gap-3">
+            <i data-lucide="briefcase" class="w-4 h-4 text-purple-400 shrink-0"></i>
+            <span class="text-sm text-purple-200/70">SDE Intern @ TCS</span>
+          </div>
+          <div class="glass rounded-xl p-3 flex items-center gap-3">
+            <i data-lucide="code-2" class="w-4 h-4 text-purple-400 shrink-0"></i>
+            <span class="text-sm text-purple-200/70">Full Stack + ML</span>
+          </div>
+        </div>
+
+        <a href="#" class="btn-primary inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-xl">
+          <span>Download Resume</span>
+          <i data-lucide="download" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SKILLS
+═══════════════════════════════════════════ -->
+<section id="skills" class="relative z-10 py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-tag">// what i know</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mt-2">Tech <span class="gradient-text">Stack</span></h2>
+    </div>
+
+    <!-- DevIcons grid -->
+    <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3 mb-16 reveal">
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-html5-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">HTML5</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-css3-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">CSS3</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-javascript-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">JS</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-typescript-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">TypeScript</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-react-original colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">React</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-nextjs-original text-3xl text-white dark:text-white"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">Next.js</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-nodejs-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">Node.js</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-python-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">Python</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-mongodb-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">MongoDB</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-mysql-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">MySQL</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-docker-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">Docker</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-git-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">Git</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-tensorflow-original colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">TensorFlow</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-tailwindcss-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">Tailwind</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-linux-plain text-3xl text-gray-300"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">Linux</span>
+      </div>
+      <div class="glass rounded-2xl p-3 flex flex-col items-center gap-2 hover:bg-purple-500/10 transition-all hover:-translate-y-1 group cursor-default">
+        <i class="devicon-figma-plain colored text-3xl"></i>
+        <span class="text-xs text-purple-300/50 group-hover:text-purple-300 transition-colors">Figma</span>
+      </div>
+    </div>
+
+    <!-- Animated skill bars -->
+    <div id="skill-bars" class="grid md:grid-cols-2 gap-8">
+      <div class="reveal">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-purple-200">Frontend Development</span>
+          <span class="text-sm font-mono text-purple-400">90%</span>
+        </div>
+        <div class="h-2 bg-purple-900/40 rounded-full overflow-hidden">
+          <div class="skill-fill h-full rounded-full" data-w="90" style="background:linear-gradient(90deg,#7e22ce,#a855f7,#ec4899)"></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-purple-200">Backend / APIs</span>
+          <span class="text-sm font-mono text-purple-400">82%</span>
+        </div>
+        <div class="h-2 bg-purple-900/40 rounded-full overflow-hidden">
+          <div class="skill-fill h-full rounded-full" data-w="82" style="background:linear-gradient(90deg,#7e22ce,#a855f7,#ec4899)"></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-purple-200">Machine Learning / AI</span>
+          <span class="text-sm font-mono text-purple-400">72%</span>
+        </div>
+        <div class="h-2 bg-purple-900/40 rounded-full overflow-hidden">
+          <div class="skill-fill h-full rounded-full" data-w="72" style="background:linear-gradient(90deg,#7e22ce,#06b6d4)"></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-purple-200">Data Structures & Algorithms</span>
+          <span class="text-sm font-mono text-purple-400">86%</span>
+        </div>
+        <div class="h-2 bg-purple-900/40 rounded-full overflow-hidden">
+          <div class="skill-fill h-full rounded-full" data-w="86" style="background:linear-gradient(90deg,#7e22ce,#06b6d4)"></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-purple-200">DevOps & Cloud</span>
+          <span class="text-sm font-mono text-purple-400">62%</span>
+        </div>
+        <div class="h-2 bg-purple-900/40 rounded-full overflow-hidden">
+          <div class="skill-fill h-full rounded-full" data-w="62" style="background:linear-gradient(90deg,#7e22ce,#ec4899)"></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="flex justify-between mb-2">
+          <span class="text-sm font-medium text-purple-200">UI / UX Design</span>
+          <span class="text-sm font-mono text-purple-400">78%</span>
+        </div>
+        <div class="h-2 bg-purple-900/40 rounded-full overflow-hidden">
+          <div class="skill-fill h-full rounded-full" data-w="78" style="background:linear-gradient(90deg,#ec4899,#a855f7)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROJECTS
+═══════════════════════════════════════════ -->
+<section id="projects" class="relative z-10 py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <span class="section-tag">// what i've built</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mt-2">Featured <span class="gradient-text">Projects</span></h2>
+    </div>
+
+    <!-- GitHub fetch bar -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12 reveal">
+      <div class="glass flex items-center gap-2 px-4 py-2.5 rounded-xl w-full sm:w-auto">
+        <i data-lucide="github" class="w-4 h-4 text-purple-400 shrink-0"></i>
+        <input type="text" id="gh-user" value="octocat" placeholder="GitHub username"
+          class="bg-transparent text-sm text-purple-200 outline-none w-44 placeholder-purple-400/40">
+      </div>
+      <button id="btn-fetch" class="btn-primary text-white text-sm font-semibold px-5 py-2.5 rounded-xl flex items-center gap-2 w-full sm:w-auto justify-center">
+        <span>Fetch Repos</span>
+        <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="fetch-ico"></i>
+      </button>
+      <button id="btn-manual" class="glass text-purple-300 text-sm font-semibold px-5 py-2.5 rounded-xl flex items-center gap-2 hover:bg-purple-500/20 transition-all w-full sm:w-auto justify-center">
+        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+        <span>My Projects</span>
+      </button>
+    </div>
+
+    <!-- Manual grid (default) -->
+    <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <!-- GitHub grid -->
+    <div id="github-grid" class="hidden grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <!-- Loading -->
+    <div id="gh-loading" class="hidden text-center py-16">
+      <div class="inline-flex items-center gap-3 text-purple-400">
+        <div class="w-5 h-5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+        <span class="font-mono text-sm">Fetching repositories…</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     EXPERIENCE / INTERNSHIPS
+═══════════════════════════════════════════ -->
+<section id="experience" class="relative z-10 py-28 px-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-tag">// where i've worked</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mt-2">Internship & <span class="gradient-text">Experience</span></h2>
+    </div>
+
+    <div class="relative pl-12">
+      <div class="tl-line"></div>
+
+      <!-- Internship 1 -->
+      <div class="relative mb-10 reveal">
+        <div class="absolute left-[-2.6rem] w-6 h-6 rounded-full bg-purple-600 border-2 border-purple-400 flex items-center justify-center">
+          <div class="w-2 h-2 rounded-full bg-white"></div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 card-3d">
+          <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+            <div>
+              <h3 class="font-display font-bold text-lg text-white">Software Engineering Intern</h3>
+              <p class="text-purple-400 font-medium text-sm mt-0.5">Tata Consultancy Services (TCS)</p>
+            </div>
+            <span class="glass px-3 py-1 rounded-full text-xs font-mono text-green-400 border border-green-500/20 whitespace-nowrap">May – Aug 2024</span>
+          </div>
+          <ul class="space-y-2 text-sm text-purple-200/70 mb-5">
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-400 shrink-0 mt-0.5"></i>Built microservices with Node.js & Express reducing API latency by 35%</li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-400 shrink-0 mt-0.5"></i>Migrated legacy MySQL queries to optimized MongoDB aggregation pipelines</li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-purple-400 shrink-0 mt-0.5"></i>Automated CI/CD pipeline on Jenkins, slashing deploy time by 40%</li>
+          </ul>
+          <div class="flex flex-wrap gap-2">
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">Node.js</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">MongoDB</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">Docker</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">Jenkins</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Internship 2 -->
+      <div class="relative mb-10 reveal">
+        <div class="absolute left-[-2.6rem] w-6 h-6 rounded-full bg-pink-600 border-2 border-pink-400 flex items-center justify-center">
+          <div class="w-2 h-2 rounded-full bg-white"></div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 card-3d">
+          <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+            <div>
+              <h3 class="font-display font-bold text-lg text-white">ML Research Intern</h3>
+              <p class="text-pink-400 font-medium text-sm mt-0.5">IIT Madras — NLP Research Lab</p>
+            </div>
+            <span class="glass px-3 py-1 rounded-full text-xs font-mono text-blue-400 border border-blue-500/20 whitespace-nowrap">Jan – Apr 2024</span>
+          </div>
+          <ul class="space-y-2 text-sm text-purple-200/70 mb-5">
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-pink-400 shrink-0 mt-0.5"></i>Implemented NLP pipelines for sentiment analysis on regional language datasets</li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-pink-400 shrink-0 mt-0.5"></i>Fine-tuned BERT achieving 92% accuracy on Tamil dataset (10K samples)</li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-pink-400 shrink-0 mt-0.5"></i>Co-authored research paper submitted to EMNLP 2024</li>
+          </ul>
+          <div class="flex flex-wrap gap-2">
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">Python</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">PyTorch</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">BERT</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">HuggingFace</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Freelance -->
+      <div class="relative reveal">
+        <div class="absolute left-[-2.6rem] w-6 h-6 rounded-full bg-cyan-600 border-2 border-cyan-400 flex items-center justify-center">
+          <div class="w-2 h-2 rounded-full bg-white"></div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 card-3d">
+          <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+            <div>
+              <h3 class="font-display font-bold text-lg text-white">Freelance Full-Stack Developer</h3>
+              <p class="text-cyan-400 font-medium text-sm mt-0.5">Self-employed</p>
+            </div>
+            <span class="glass px-3 py-1 rounded-full text-xs font-mono text-cyan-400 border border-cyan-500/20 whitespace-nowrap">2022 – Present</span>
+          </div>
+          <ul class="space-y-2 text-sm text-purple-200/70 mb-5">
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>Delivered 8+ client projects — e-commerce platforms, SaaS dashboards, and portfolios</li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>Built and maintained React/Next.js apps for early-stage startups</li>
+          </ul>
+          <div class="flex flex-wrap gap-2">
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">React</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">Next.js</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">Tailwind</span>
+            <span class="glass px-2.5 py-1 rounded-lg text-xs text-purple-300">Stripe</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     EDUCATION & CERTIFICATIONS
+═══════════════════════════════════════════ -->
+<section id="education" class="relative z-10 py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-tag">// qualifications</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mt-2">Education & <span class="gradient-text">Certifications</span></h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-14">
+      <div class="glass-card rounded-2xl p-6 reveal card-3d">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-purple-600/20 flex items-center justify-center shrink-0">
+            <i data-lucide="graduation-cap" class="w-6 h-6 text-purple-400"></i>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-white">B.Tech — Computer Science & Eng.</h3>
+            <p class="text-purple-400 text-sm font-medium mt-1">VIT Vellore</p>
+            <p class="text-purple-300/50 text-sm mt-0.5 font-mono">2021 – 2025 &nbsp;|&nbsp; CGPA: 8.9 / 10</p>
+            <div class="flex flex-wrap gap-2 mt-3">
+              <span class="glass px-2 py-0.5 rounded-md text-xs text-purple-300">DSA</span>
+              <span class="glass px-2 py-0.5 rounded-md text-xs text-purple-300">OS</span>
+              <span class="glass px-2 py-0.5 rounded-md text-xs text-purple-300">DBMS</span>
+              <span class="glass px-2 py-0.5 rounded-md text-xs text-purple-300">ML</span>
+              <span class="glass px-2 py-0.5 rounded-md text-xs text-purple-300">CN</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="glass-card rounded-2xl p-6 reveal card-3d">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-pink-600/20 flex items-center justify-center shrink-0">
+            <i data-lucide="book-open" class="w-6 h-6 text-pink-400"></i>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-white">Class XII — Science (PCM + CS)</h3>
+            <p class="text-pink-400 text-sm font-medium mt-1">Delhi Public School, New Delhi</p>
+            <p class="text-purple-300/50 text-sm mt-0.5 font-mono">2021 &nbsp;|&nbsp; 95.6%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certifications + Achievements -->
+    <h3 class="font-display text-2xl font-bold text-center mb-8 reveal">Certifications & <span class="gradient-text">Achievements</span></h3>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="glass rounded-xl p-4 flex items-center gap-3 reveal hover:bg-purple-500/10 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center shrink-0">
+          <i data-lucide="award" class="w-5 h-5 text-yellow-400"></i>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-white">AWS Certified Solutions Architect</p>
+          <p class="text-xs text-purple-400/60 font-mono">Amazon Web Services · 2024</p>
+        </div>
+      </div>
+      <div class="glass rounded-xl p-4 flex items-center gap-3 reveal hover:bg-purple-500/10 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+          <i data-lucide="award" class="w-5 h-5 text-blue-400"></i>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-white">Meta Front-End Developer</p>
+          <p class="text-xs text-purple-400/60 font-mono">Coursera · 2023</p>
+        </div>
+      </div>
+      <div class="glass rounded-xl p-4 flex items-center gap-3 reveal hover:bg-purple-500/10 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
+          <i data-lucide="award" class="w-5 h-5 text-green-400"></i>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-white">Google Data Analytics Professional</p>
+          <p class="text-xs text-purple-400/60 font-mono">Google · 2023</p>
+        </div>
+      </div>
+      <div class="glass rounded-xl p-4 flex items-center gap-3 reveal hover:bg-purple-500/10 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
+          <i data-lucide="trophy" class="w-5 h-5 text-orange-400"></i>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-white">1st Place — Smart India Hackathon</p>
+          <p class="text-xs text-purple-400/60 font-mono">MoE, India · 2023</p>
+        </div>
+      </div>
+      <div class="glass rounded-xl p-4 flex items-center gap-3 reveal hover:bg-purple-500/10 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
+          <i data-lucide="star" class="w-5 h-5 text-purple-400"></i>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-white">LeetCode — 1800+ Rating</p>
+          <p class="text-xs text-purple-400/60 font-mono">500+ problems solved</p>
+        </div>
+      </div>
+      <div class="glass rounded-xl p-4 flex items-center gap-3 reveal hover:bg-purple-500/10 transition-all">
+        <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0">
+          <i data-lucide="zap" class="w-5 h-5 text-red-400"></i>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-white">Deep Learning Specialization</p>
+          <p class="text-xs text-purple-400/60 font-mono">deeplearning.ai · 2024</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     HOBBIES
+═══════════════════════════════════════════ -->
+<section id="hobbies" class="relative z-10 py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-tag">// beyond the code</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mt-2">Hobbies & <span class="gradient-text">Interests</span></h2>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
+      <div class="hobby-card glass-card rounded-2xl p-6 text-center hover:bg-purple-500/10 transition-all cursor-default reveal card-3d">
+        <div class="hicon text-4xl mb-4">♟️</div>
+        <h3 class="font-display font-semibold text-white text-sm">Chess</h3>
+        <p class="text-xs text-purple-300/50 mt-1">1600+ ELO on Chess.com</p>
+      </div>
+      <div class="hobby-card glass-card rounded-2xl p-6 text-center hover:bg-purple-500/10 transition-all cursor-default reveal card-3d">
+        <div class="hicon text-4xl mb-4">🎮</div>
+        <h3 class="font-display font-semibold text-white text-sm">Gaming</h3>
+        <p class="text-xs text-purple-300/50 mt-1">Valorant · CS2 · Minecraft</p>
+      </div>
+      <div class="hobby-card glass-card rounded-2xl p-6 text-center hover:bg-purple-500/10 transition-all cursor-default reveal card-3d">
+        <div class="hicon text-4xl mb-4">📷</div>
+        <h3 class="font-display font-semibold text-white text-sm">Photography</h3>
+        <p class="text-xs text-purple-300/50 mt-1">Urban & Landscape</p>
+      </div>
+      <div class="hobby-card glass-card rounded-2xl p-6 text-center hover:bg-purple-500/10 transition-all cursor-default reveal card-3d">
+        <div class="hicon text-4xl mb-4">📚</div>
+        <h3 class="font-display font-semibold text-white text-sm">Reading</h3>
+        <p class="text-xs text-purple-300/50 mt-1">Sci-fi & Tech Books</p>
+      </div>
+      <div class="hobby-card glass-card rounded-2xl p-6 text-center hover:bg-purple-500/10 transition-all cursor-default reveal card-3d">
+        <div class="hicon text-4xl mb-4">🎵</div>
+        <h3 class="font-display font-semibold text-white text-sm">Music</h3>
+        <p class="text-xs text-purple-300/50 mt-1">Guitar · Lo-fi · EDM</p>
+      </div>
+      <div class="hobby-card glass-card rounded-2xl p-6 text-center hover:bg-purple-500/10 transition-all cursor-default reveal card-3d">
+        <div class="hicon text-4xl mb-4">🏃</div>
+        <h3 class="font-display font-semibold text-white text-sm">Running</h3>
+        <p class="text-xs text-purple-300/50 mt-1">5K Morning Runs</p>
+      </div>
+      <div class="hobby-card glass-card rounded-2xl p-6 text-center hover:bg-purple-500/10 transition-all cursor-default reveal card-3d">
+        <div class="hicon text-4xl mb-4">✈️</div>
+        <h3 class="font-display font-semibold text-white text-sm">Travel</h3>
+        <p class="text-xs text-purple-300/50 mt-1">12 States Explored</p>
+      </div>
+      <div class="hobby-card glass-card rounded-2xl p-6 text-center hover:bg-purple-500/10 transition-all cursor-default reveal card-3d">
+        <div class="hicon text-4xl mb-4">🎨</div>
+        <h3 class="font-display font-semibold text-white text-sm">UI Design</h3>
+        <p class="text-xs text-purple-300/50 mt-1">Figma · Framer</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════ -->
+<section id="contact" class="relative z-10 py-28 px-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-tag">// let's connect</span>
+      <h2 class="font-display text-4xl md:text-5xl font-bold mt-2">Get In <span class="gradient-text">Touch</span></h2>
+      <p class="text-purple-200/50 mt-4 max-w-xl mx-auto text-sm">Have a project in mind or want to collaborate? I'm always open to exciting opportunities.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Info cards -->
+      <div class="space-y-4 reveal">
+        <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:bg-purple-500/10 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-purple-600/20 flex items-center justify-center shrink-0">
+            <i data-lucide="mail" class="w-5 h-5 text-purple-400"></i>
+          </div>
+          <div>
+            <p class="text-xs text-purple-400/60 font-mono">Email</p>
+            <p class="text-sm font-medium text-white">aryan.sharma@email.com</p>
+          </div>
+        </div>
+        <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:bg-purple-500/10 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-blue-600/20 flex items-center justify-center shrink-0">
+            <i data-lucide="linkedin" class="w-5 h-5 text-blue-400"></i>
+          </div>
+          <div>
+            <p class="text-xs text-purple-400/60 font-mono">LinkedIn</p>
+            <p class="text-sm font-medium text-white">linkedin.com/in/aryandev</p>
+          </div>
+        </div>
+        <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:bg-purple-500/10 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-gray-600/20 flex items-center justify-center shrink-0">
+            <i data-lucide="github" class="w-5 h-5 text-gray-300"></i>
+          </div>
+          <div>
+            <p class="text-xs text-purple-400/60 font-mono">GitHub</p>
+            <p class="text-sm font-medium text-white">github.com/aryandev</p>
+          </div>
+        </div>
+        <div class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:bg-purple-500/10 transition-all">
+          <div class="w-10 h-10 rounded-xl bg-green-600/20 flex items-center justify-center shrink-0">
+            <i data-lucide="map-pin" class="w-5 h-5 text-green-400"></i>
+          </div>
+          <div>
+            <p class="text-xs text-purple-400/60 font-mono">Location</p>
+            <p class="text-sm font-medium text-white">Vellore, Tamil Nadu, India</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="glass-card rounded-2xl p-6 reveal">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-mono text-purple-400/60 mb-1.5">Your Name</label>
+            <input type="text" id="cf-name" placeholder="John Doe"
+              class="w-full glass px-4 py-3 rounded-xl text-sm text-purple-200 placeholder-purple-400/30 outline-none focus:ring-1 focus:ring-purple-500/50 transition-all bg-transparent">
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-purple-400/60 mb-1.5">Email Address</label>
+            <input type="email" id="cf-email" placeholder="john@example.com"
+              class="w-full glass px-4 py-3 rounded-xl text-sm text-purple-200 placeholder-purple-400/30 outline-none focus:ring-1 focus:ring-purple-500/50 transition-all bg-transparent">
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-purple-400/60 mb-1.5">Message</label>
+            <textarea id="cf-msg" rows="4" placeholder="Let's talk about your project…"
+              class="w-full glass px-4 py-3 rounded-xl text-sm text-purple-200 placeholder-purple-400/30 outline-none focus:ring-1 focus:ring-purple-500/50 transition-all bg-transparent resize-none"></textarea>
+          </div>
+          <button id="cf-send" class="w-full btn-primary text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2">
+            <span>Send Message</span>
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+          <p id="cf-success" class="hidden text-center text-sm text-green-400 font-mono">✓ Message sent! I'll get back to you soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer class="relative z-10 py-8 px-6 border-t border-purple-500/10">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="text-sm text-purple-400/50 font-mono">© 2025 Aryan Sharma — Built with <span class="text-purple-400">♥</span> & Vanilla JS</p>
+    <div class="flex items-center gap-4">
+      <a href="https://github.com"   target="_blank" class="text-purple-400/40 hover:text-purple-400 transition-colors"><i data-lucide="github"   class="w-4 h-4"></i></a>
+      <a href="https://linkedin.com" target="_blank" class="text-purple-400/40 hover:text-purple-400 transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+      <a href="https://twitter.com"  target="_blank" class="text-purple-400/40 hover:text-purple-400 transition-colors"><i data-lucide="twitter"  class="w-4 h-4"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     PROJECT MODAL
+═══════════════════════════════════════════ -->
+<div id="proj-modal" class="modal-overlay">
+  <div class="modal-box glass-card rounded-2xl max-w-2xl w-full mx-4 p-7 relative">
+    <button id="close-modal" class="absolute top-4 right-4 glass p-2 rounded-xl hover:bg-red-500/20 transition-all">
+      <i data-lucide="x" class="w-4 h-4 text-purple-300"></i>
+    </button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+/* ──────────────────────────────────────────
+   CONFIG — change these to personalise
+─────────────────────────────────────────── */
+const GITHUB_USER_DEFAULT = 'octocat';
+
+const MANUAL_PROJECTS = [
+  {
+    title: 'EduVerse — LMS Platform',
+    desc:  'Full-stack LMS with video streaming, AI-powered recommendations, leaderboards and quizzes.',
+    details: 'Handles 500+ concurrent users. Built with Socket.io for real-time events, FFmpeg for video transcoding, and an ML recommendation engine.',
+    tags:  ['React','Node.js','MongoDB','Socket.io','FFmpeg'],
+    color: '#a855f7', icon: '🎓', stars: 142,
+    github: 'https://github.com', demo: 'https://demo.example.com'
+  },
+  {
+    title: 'HealthSync — Patient Portal',
+    desc:  'React Native cross-platform app for doctor-patient comm with real-time vitals tracking.',
+    details: '200+ DAU. Integrates hospital APIs for live health data. Includes ML anomaly detection for vitals and automated prescription generation.',
+    tags:  ['React Native','Firebase','Python','Flask'],
+    color: '#ec4899', icon: '🏥', stars: 89,
+    github: 'https://github.com', demo: 'https://demo.example.com'
+  },
+  {
+    title: 'TradeVision — Stock Dashboard',
+    desc:  'Real-time stock dashboard with candlestick charts, AI news sentiment, and technical indicators.',
+    details: 'Aggregates 5 financial APIs with sub-second latency via Redis. Includes MACD, RSI, Bollinger Bands and sentiment scoring from live news.',
+    tags:  ['Next.js','D3.js','FastAPI','Redis','Python'],
+    color: '#06b6d4', icon: '📈', stars: 201,
+    github: 'https://github.com', demo: 'https://demo.example.com'
+  },
+  {
+    title: 'CodeCollab — Real-time IDE',
+    desc:  'Browser-based collaborative editor for 30+ languages with video calls and whiteboard.',
+    details: 'Operational Transform algorithm for conflict-free concurrency. Judge0 sandbox for code execution. WebRTC for peer video and whiteboard sharing.',
+    tags:  ['React','WebRTC','Socket.io','Docker','Judge0'],
+    color: '#f59e0b', icon: '💻', stars: 315,
+    github: 'https://github.com', demo: 'https://demo.example.com'
+  },
+  {
+    title: 'SentimentAI — NLP Tool',
+    desc:  'Fine-tuned BERT for multilingual sentiment analysis with REST API and analytics dashboard.',
+    details: '94% accuracy on benchmarks. Supports Hindi, Tamil, English. Published as pip package with 3K+ monthly downloads.',
+    tags:  ['Python','PyTorch','BERT','FastAPI','React'],
+    color: '#10b981', icon: '🤖', stars: 178,
+    github: 'https://github.com', demo: 'https://demo.example.com'
+  },
+  {
+    title: 'TaskFlow — Project Manager',
+    desc:  'Drag-and-drop Kanban with Gantt charts, time tracking, and 15+ integrations.',
+    details: 'Real-time updates via WebSockets. Automated workflow triggers, GitHub/Slack/Jira integrations, and time-based burndown analytics.',
+    tags:  ['Vue.js','GraphQL','PostgreSQL','Redis'],
+    color: '#8b5cf6', icon: '📋', stars: 96,
+    github: 'https://github.com', demo: 'https://demo.example.com'
+  }
+];
+
+/* ──────────────────────────────────────────
+   PARTICLES
+─────────────────────────────────────────── */
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+resizeCanvas();
+window.addEventListener('resize', ()=>{ resizeCanvas(); initParticles(); });
+
+const COLORS = ['#a855f7','#ec4899','#06b6d4','#c084fc','#8b5cf6'];
+let particles = [];
+
+class Particle {
+  reset(){
+    this.x = Math.random()*canvas.width;
+    this.y = Math.random()*canvas.height;
+    this.r = Math.random()*1.8+0.4;
+    this.vx = (Math.random()-.5)*.5;
+    this.vy = (Math.random()-.5)*.5;
+    this.alpha = Math.random()*.45+.1;
+    this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
+    this.life = Math.random()*250+100;
+  }
+  constructor(){ this.reset(); }
+  update(){
+    this.x+=this.vx; this.y+=this.vy; this.life--;
+    if(this.life<40) this.alpha*=.97;
+    if(this.life<=0||this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height) this.reset();
+  }
+  draw(){
+    ctx.save();
+    ctx.globalAlpha=this.alpha;
+    ctx.fillStyle=this.color;
+    ctx.shadowBlur=8; ctx.shadowColor=this.color;
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+}
+
+function initParticles(){
+  particles=[];
+  const n = Math.min(Math.floor(canvas.width*canvas.height/7500),130);
+  for(let i=0;i<n;i++) particles.push(new Particle());
+}
+
+function drawLines(){
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+      const d=Math.hypot(dx,dy);
+      if(d<110){
+        ctx.save();
+        ctx.globalAlpha=(1-d/110)*.12;
+        ctx.strokeStyle='#a855f7'; ctx.lineWidth=.5;
+        ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
+}
+
+function animLoop(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  drawLines();
+  particles.forEach(p=>{ p.update(); p.draw(); });
+  requestAnimationFrame(animLoop);
+}
+
+initParticles();
+animLoop();
+
+/* ──────────────────────────────────────────
+   TYPING EFFECT
+─────────────────────────────────────────── */
+const typedEl = document.getElementById('typed-text');
+const phrases = ['Full Stack Developer 🚀','ML Enthusiast 🤖','BTech CSE Student 📚','Open Source Contributor ⚡','UI/UX Designer 🎨','Problem Solver 💡'];
+let pi=0, ci=0, del=false, spd=80;
+
+function type(){
+  const p=phrases[pi];
+  if(del){ typedEl.textContent=p.slice(0,--ci); spd=40; }
+  else   { typedEl.textContent=p.slice(0,++ci); spd=80; }
+  if(!del && ci===p.length){ del=true; spd=1600; }
+  else if(del && ci===0){ del=false; pi=(pi+1)%phrases.length; spd=400; }
+  setTimeout(type,spd);
+}
+type();
+
+/* ──────────────────────────────────────────
+   DARK MODE
+─────────────────────────────────────────── */
+const html = document.documentElement;
+if(localStorage.getItem('theme')==='light') html.classList.remove('dark');
+
+document.getElementById('theme-toggle').addEventListener('click',()=>{
+  html.classList.toggle('dark');
+  localStorage.setItem('theme', html.classList.contains('dark')?'dark':'light');
+});
+
+/* ──────────────────────────────────────────
+   MOBILE MENU
+─────────────────────────────────────────── */
+const mobileMenu = document.getElementById('mobile-menu');
+document.getElementById('menu-toggle').addEventListener('click',()=>mobileMenu.classList.toggle('open'));
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mobileMenu.classList.remove('open')));
+
+/* ──────────────────────────────────────────
+   SCROLL REVEAL
+─────────────────────────────────────────── */
+const revealObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.08, rootMargin:'0px 0px -40px 0px'});
+
+function observeAll(){
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el=>revealObs.observe(el));
+}
+
+/* ──────────────────────────────────────────
+   SKILL BARS
+─────────────────────────────────────────── */
+const barObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.skill-fill').forEach(b=>{
+        setTimeout(()=>{ b.style.width=b.dataset.w+'%'; },200);
+      });
+      barObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.25});
+const skillSection = document.getElementById('skill-bars');
+if(skillSection) barObs.observe(skillSection);
+
+/* ──────────────────────────────────────────
+   3D CARD HOVER
+─────────────────────────────────────────── */
+function init3D(){
+  document.querySelectorAll('.card-3d').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const {left,top,width,height}=card.getBoundingClientRect();
+      const x=e.clientX-left, y=e.clientY-top;
+      const rx=((y-height/2)/(height/2))*-7;
+      const ry=((x-width/2)/(width/2))*7;
+      card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
+      card.style.boxShadow=`0 20px 40px rgba(168,85,247,0.2)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform=''; card.style.boxShadow='';
+    });
+  });
+}
+
+/* ──────────────────────────────────────────
+   RENDER MANUAL PROJECTS
+─────────────────────────────────────────── */
+function renderManual(){
+  const grid=document.getElementById('projects-grid');
+  grid.innerHTML='';
+  MANUAL_PROJECTS.forEach((p,i)=>{
+    const card=document.createElement('div');
+    card.className='glass-card rounded-2xl p-5 reveal card-3d cursor-default group transition-all';
+    card.innerHTML=`
+      <div class="flex items-start justify-between mb-4">
+        <span class="text-3xl">${p.icon}</span>
+        <div class="flex items-center gap-1 text-xs text-yellow-400">
+          <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          ${p.stars}
+        </div>
+      </div>
+      <h3 class="font-display font-bold text-base text-white mb-2">${p.title}</h3>
+      <p class="text-xs text-purple-200/60 leading-relaxed mb-4">${p.desc}</p>
+      <div class="flex flex-wrap gap-1 mb-5">
+        ${p.tags.map(t=>`<span class="glass px-2 py-0.5 rounded-md text-xs" style="color:${p.color}">${t}</span>`).join('')}
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="${p.github}" target="_blank" class="flex items-center gap-1.5 text-xs text-purple-400/70 hover:text-purple-300 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016.01 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.69.8.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Code
+        </a>
+        <a href="${p.demo}" target="_blank" class="flex items-center gap-1.5 text-xs text-purple-400/70 hover:text-purple-300 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Live Demo
+        </a>
+        <button class="ml-auto text-xs text-purple-400 hover:text-purple-200 transition-colors proj-detail" data-i="${i}">Details →</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  lucide.createIcons();
+  observeAll();
+  init3D();
+
+  document.querySelectorAll('.proj-detail').forEach(btn=>{
+    btn.addEventListener('click', ()=>openModal(+btn.dataset.i));
+  });
+}
+
+/* ──────────────────────────────────────────
+   GITHUB FETCH
+─────────────────────────────────────────── */
+document.getElementById('btn-fetch').addEventListener('click', async ()=>{
+  const username = document.getElementById('gh-user').value.trim() || GITHUB_USER_DEFAULT;
+  const ghGrid = document.getElementById('github-grid');
+  const manGrid = document.getElementById('projects-grid');
+  const loading = document.getElementById('gh-loading');
+  const ico = document.getElementById('fetch-ico');
+
+  manGrid.classList.add('hidden');
+  ghGrid.classList.add('hidden');
+  loading.classList.remove('hidden');
+  loading.innerHTML=`<div class="inline-flex items-center gap-3 text-purple-400"><div class="w-5 h-5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin"></div><span class="font-mono text-sm">Fetching repos for <strong>${username}</strong>…</span></div>`;
+  ico.classList.add('animate-spin');
+
+  try {
+    const res = await fetch(`https://api.github.com/users/${username}/repos?sort=stars&per_page=9`);
+    if(!res.ok) throw new Error(res.status===404?`User "${username}" not found`:'GitHub API error');
+    const repos = await res.json();
+    if(!repos.length) throw new Error('No public repositories found');
+
+    const langColors={JavaScript:'#f7df1e',Python:'#3572A5',TypeScript:'#3178c6',CSS:'#563d7c',HTML:'#e34c26',Java:'#b07219','C++':'#f34b7d',Go:'#00add8',Rust:'#dea584',Ruby:'#701516',Kotlin:'#A97BFF',Swift:'#F05138',PHP:'#4F5D95',Dart:'#00B4AB'};
+
+    ghGrid.innerHTML='';
+    repos.forEach(repo=>{
+      const lc=langColors[repo.language]||'#a855f7';
+      const card=document.createElement('div');
+      card.className='glass-card rounded-2xl p-5 reveal card-3d transition-all';
+      card.innerHTML=`
+        <div class="flex items-start justify-between mb-3">
+          <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/></svg>
+          <div class="flex items-center gap-3 text-xs text-purple-400/60">
+            <span class="flex items-center gap-1"><svg class="w-3 h-3 fill-yellow-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${repo.stargazers_count}</span>
+            <span class="flex items-center gap-1"><svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M5 4a2 2 0 012-2h10a2 2 0 012 2v16l-7-3-7 3V4z"/></svg>${repo.forks_count}</span>
+          </div>
+        </div>
+        <h3 class="font-display font-bold text-base text-white mb-2 truncate">${repo.name}</h3>
+        <p class="text-xs text-purple-200/60 leading-relaxed mb-4 line-clamp-2">${repo.description||'No description available.'}</p>
+        ${repo.language?`<div class="flex items-center gap-2 mb-4"><div class="w-2.5 h-2.5 rounded-full" style="background:${lc}"></div><span class="text-xs text-purple-200/50">${repo.language}</span></div>`:''}
+        <a href="${repo.html_url}" target="_blank" class="flex items-center gap-1.5 text-xs text-purple-400 hover:text-purple-300 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016.01 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.69.8.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub ↗
+        </a>
+      `;
+      ghGrid.appendChild(card);
+    });
+
+    loading.classList.add('hidden');
+    ghGrid.classList.remove('hidden');
+    observeAll(); init3D();
+
+  } catch(err){
+    loading.innerHTML=`
+      <div class="glass-card inline-flex flex-col items-center gap-3 px-8 py-6 rounded-2xl">
+        <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <p class="text-red-400 font-mono text-sm">${err.message}</p>
+        <button id="err-back" class="glass px-4 py-2 rounded-xl text-xs text-purple-300 hover:bg-purple-500/20 transition-all">← Back to My Projects</button>
+      </div>`;
+    document.getElementById('err-back')?.addEventListener('click',()=>{
+      loading.classList.add('hidden');
+      manGrid.classList.remove('hidden');
+    });
+  } finally {
+    ico.classList.remove('animate-spin');
+  }
+});
+
+document.getElementById('btn-manual').addEventListener('click',()=>{
+  document.getElementById('github-grid').classList.add('hidden');
+  document.getElementById('gh-loading').classList.add('hidden');
+  document.getElementById('projects-grid').classList.remove('hidden');
+});
+
+/* ──────────────────────────────────────────
+   PROJECT MODAL
+─────────────────────────────────────────── */
+function openModal(i){
+  const p=MANUAL_PROJECTS[i];
+  document.getElementById('modal-body').innerHTML=`
+    <div class="text-4xl mb-4">${p.icon}</div>
+    <h2 class="font-display text-2xl font-bold text-white mb-2">${p.title}</h2>
+    <p class="text-purple-200/70 text-sm leading-relaxed mb-5">${p.details}</p>
+    <div class="glass rounded-xl p-4 mb-5">
+      <p class="text-xs font-mono text-purple-400/60 mb-2">Tech Stack</p>
+      <div class="flex flex-wrap gap-2">
+        ${p.tags.map(t=>`<span class="glass px-3 py-1 rounded-lg text-xs text-purple-300">${t}</span>`).join('')}
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <a href="${p.github}" target="_blank" class="btn-primary flex-1 text-white text-sm font-semibold py-3 rounded-xl flex items-center justify-center gap-2"><span>View Code</span></a>
+      <a href="${p.demo}"   target="_blank" class="glass flex-1 text-purple-300 text-sm font-semibold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-purple-500/20 transition-all"><span>Live Demo ↗</span></a>
+    </div>
+  `;
+  document.getElementById('proj-modal').classList.add('active');
+}
+
+const modal = document.getElementById('proj-modal');
+document.getElementById('close-modal').addEventListener('click',()=>modal.classList.remove('active'));
+modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('active'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') modal.classList.remove('active'); });
+
+/* ──────────────────────────────────────────
+   CONTACT FORM (simulated)
+─────────────────────────────────────────── */
+document.getElementById('cf-send').addEventListener('click',()=>{
+  const name  = document.getElementById('cf-name').value.trim();
+  const email = document.getElementById('cf-email').value.trim();
+  const msg   = document.getElementById('cf-msg').value.trim();
+  if(!name||!email||!msg){ alert('Please fill in all fields.'); return; }
+  document.getElementById('cf-success').classList.remove('hidden');
+  document.getElementById('cf-name').value='';
+  document.getElementById('cf-email').value='';
+  document.getElementById('cf-msg').value='';
+  setTimeout(()=>document.getElementById('cf-success').classList.add('hidden'), 4000);
+});
+
+/* ──────────────────────────────────────────
+   NAV ACTIVE HIGHLIGHT
+─────────────────────────────────────────── */
+const secObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.nav-lnk').forEach(l=>{
+        l.classList.toggle('text-purple-400', l.getAttribute('href')==='#'+e.target.id);
+        l.classList.toggle('text-purple-200/60', l.getAttribute('href')!=='#'+e.target.id);
+      });
+    }
+  });
+},{threshold:0.45});
+document.querySelectorAll('section[id]').forEach(s=>secObs.observe(s));
+
+/* ──────────────────────────────────────────
+   INIT
+─────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', ()=>{
+  lucide.createIcons();
+  renderManual();
+  observeAll();
+  init3D();
+});
+
+// Fallback — ensure icons & reveal run after all dynamic content
+setTimeout(()=>{ lucide.createIcons(); observeAll(); init3D(); }, 200);
+</script>
+</body>
+</html>
